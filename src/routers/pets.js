@@ -43,4 +43,39 @@ router.post('/', async (req, res) => {
     })
 })
 
+router.get('/:id', async (req, res) => {
+
+    let sqlQuery = ' SELECT * FROM pets WHERE id= $1'
+
+    const queryParams = [Number(req.params.id)]
+    const qResult = await db.query(sqlQuery, queryParams)
+
+    res.status(200).json({
+        pets: qResult.rows[0]
+    })
+})
+
+router.put('/:id', async (req, res) => {
+
+    let sqlQuery = `UPDATE pets SET name = $1, age = $2, type = $3, breed = $4, microchip = $5 WHERE id = $6 RETURNING *;`
+
+    const queryParams = [
+
+        req.body.name,
+        Number(req.body.age),
+        req.body.type,
+        req.body.breed,
+        Boolean(req.body.microchip),
+        Number(req.params.id)
+
+    ];
+
+    const qResult = await db.query(sqlQuery, queryParams);
+
+    res.status(201).json({
+        pet: qResult.rows[0]
+    });
+})
+
+
 module.exports = router
