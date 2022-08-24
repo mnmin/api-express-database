@@ -77,5 +77,21 @@ router.put('/:id', async (req, res) => {
     });
 })
 
+router.delete('/:id', async (req, res) => {
+
+    let sqlQuery = `
+        DELETE FROM pets 
+        WHERE id = $1
+        RETURNING *
+    `;
+
+    const queryParams = [Number(req.params.id)];
+    const qResult = await db.query(sqlQuery, queryParams);
+
+    res.status(201).json({
+        pet: qResult.rows[0]
+    });
+})
+
 
 module.exports = router
