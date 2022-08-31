@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 
-    let sqlQuery = ' SELECT * FROM books WHERE id= $1'
+    let sqlQuery = ' SELECT * FROM books WHERE id = $1'
 
     const queryParams = [Number(req.params.id)]
     const qResult = await db.query(sqlQuery, queryParams)
